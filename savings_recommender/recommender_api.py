@@ -24,7 +24,6 @@ From this csv, it extracts San Francisco businesses and the amounts spent at
 them. This prototype was built to read only Bank of America statments and
 my own personal 4 month transaction history was used as a demonstration.
 '''
-
 def statement_extract(csv):
 
     transactions = pd.read_csv(csv)
@@ -90,7 +89,6 @@ Function:
  - finds businesses most similar to the business input
  - weights these similar businesses by distance and number of matching categories
 '''
-
 def best_business_recs(business, matrix, df):
 
     # calulate cosine similarity between all rows in matrix
@@ -204,7 +202,6 @@ Outputs:
 Function:
  - gets recommendations for each business in the extracted_business_list
 '''
-
 def statement_to_recs(extracted_business_list, spendings, num_matrix, df):
 
     all_monthly_recs = []
@@ -252,7 +249,6 @@ Inputs:
  Function:
   - creates a multiline bokeh plot of spendings by month broken into 5 categories
 '''
-
 def spendings_plot(spendings_dict, df):
 
     food12 = []
@@ -394,8 +390,6 @@ Inputs:
 Function:
  - caluclated the haversine distance between 2 businesses
 '''
-
-
 def haversine(lng1, lat1, lng2, lat2):
 
     # convert decimal degrees to radians
