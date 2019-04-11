@@ -56,6 +56,7 @@ def uploaded_file(filename):
     send_from_directory(app.config['UPLOAD_FOLDER'], filename)
     return redirect(url_for('user_recs', filename=filename))
 
+return jsonify(spending_dicts)
 
 @app.route('/recs/<filename>', methods=["POST", "GET"])
 def user_recs(filename):
