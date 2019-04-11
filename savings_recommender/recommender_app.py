@@ -65,8 +65,8 @@ def user_recs(filename):
     df = pd.read_pickle('./final_df.pkl')
 
     statement = '/Users/kari/ds/metis/metisgh/kojak/flask_app/' + filename
-    cleaned_statement, spendings = clean_statement(statement)
-    all_recs, cheap_recs, high_rates_recs, category_counts, spendings_dict = statement_to_recs(cleaned_statement, spendings, num_matrix, df)
+    extracted_business_list, spendings = statement_extract(statement)
+    all_recs, cheap_recs, high_rates_recs, category_counts, spendings_dict = statement_to_recs(extracted_business_list, spendings, num_matrix, df)
 
     no_matches = []
     for key, value in cheap_recs.items():

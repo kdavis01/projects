@@ -17,7 +17,15 @@ from bokeh.plotting import figure, output_file, show
 from bokeh.transform import cumsum
 from bokeh.resources import CDN
 
-def clean_statement(csv):
+'''
+The statement_extract function takes in a bank statement in the form of a csv
+of the format ('Posted Date', 'Reference Number', 'Payee', 'Address', 'Amount').
+From this csv, it extracts San Francisco businesses and the amounts spent at
+them. This prototype was built to read only Bank of America statments and
+my own personal 4 month transaction history was used as a demonstration.
+'''
+
+def statement_extract(csv):
 
     transactions = pd.read_csv(csv)
     transactions.dropna()
@@ -68,6 +76,20 @@ def clean_statement(csv):
 
     return businesses, spendings
 
+'''
+Inputs:
+ - business: business name to get recs for
+ - df: pandas dataframe of SF businesses
+ - matrix: array with all numeric values from df
+Outputs:
+ - final_recs: list of top 5 overall business recs
+ - save_money_recs: dictionary of only cheaper business recs
+ - higher_rated_recs: dictionary of both cheaper and higher rated business recs
+Function:
+ - calculates the cosine similarity between all businesses in df
+ - finds businesses most similar to the business input
+ - weights these similar businesses by distance and number of matching categories
+'''
 
 def best_business_recs(business, matrix, df):
 
@@ -167,8 +189,23 @@ def best_business_recs(business, matrix, df):
 
     return final_recs[:5], save_money_recs, higher_rated_recs
 
+'''
+Inputs:
+ - extracted_business_list: list of business names
+ - spendings: dictionary of business visited including when and how much was spent.
+ - df: pandas dataframe of SF businesses
+ - num_matrix: array with all numeric values from df
+Outputs:
+ - all_monthly_recs: list of all recs
+ - save_money_recs: dictionary of only cheaper business recs
+ - higher_rated_recs: dictionary of both cheaper and higher rated business recs
+ - category_counts: dictionary of business categories match counts
+ - spendings_dict: dictionary of businesses visited including when and how much was spent.
+Function:
+ - gets recommendations for each business in the extracted_business_list
+'''
 
-def statement_to_recs(clean_statement_list, spendings, num_matrix, df):
+def statement_to_recs(extracted_business_list, spendings, num_matrix, df):
 
     all_monthly_recs = []
     save_money_recs = {}
@@ -204,6 +241,17 @@ def statement_to_recs(clean_statement_list, spendings, num_matrix, df):
             pass
 
     return all_monthly_recs, save_money_recs, higher_rated_recs, category_counts, spendings_dict
+
+'''
+Inputs:
+  - spendings_dict: dictionary of business visited including when and how much was spent.
+  - df: pandas dataframe of SF businesses
+ Outputs:
+  - script, div: bokeh components for plotting
+  - food, services, bars, retail, coffee: lists with sums of amounts spent in each category
+ Function:
+  - creates a multiline bokeh plot of spendings by month broken into 5 categories
+'''
 
 def spendings_plot(spendings_dict, df):
 
@@ -338,6 +386,14 @@ def spendings_plot(spendings_dict, df):
     script, div = components(p)
 
     return script, div, food, services, bars, coffee, retail
+
+'''
+Inputs:
+ - lng1, lat1: latitude and longitude of business visited
+ - lng1, lat2: latitude and longitude of business recommended
+Function:
+ - caluclated the haversine distance between 2 businesses
+'''
 
 
 def haversine(lng1, lat1, lng2, lat2):
